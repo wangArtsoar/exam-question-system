@@ -123,29 +123,32 @@ public class JwtUtils {
 	/**
 	 * 创建token
 	 *
-	 * @param user
-	 * @return
+	 * @param user 用户信息
+	 * @return string
 	 */
 	public String generateToken(UserDetails user) {
+		// 调用重载的generateToken方法，传入一个空的HashMap和用户信息
 		return generateToken(new HashMap<>(), user);
 	}
 
 	private String generateToken(Map<String, Objects> claims, UserDetails user) {
+		// 调用buildToken方法，传入claims，用户信息和过期时间
 		return buildToken(claims, user, expiration());
 	}
 
 	private String buildToken(Map<String, Objects> claims, UserDetails user, Long expiration) {
 		return Jwts
-						.builder()
-						.setClaims(claims)
-						.setSubject(user.getUsername())
-						.setIssuedAt(new Date(System.currentTimeMillis()))
-						.setExpiration(new Date(System.currentTimeMillis() + expiration))
-						.signWith(getSigningKey(), SignatureAlgorithm.HS256)
-						.compact();
+						.builder() // 创建一个JWT token构建器
+						.setClaims(claims) // 设置claims(空的hashmap，即为空值)
+						.setSubject(user.getUsername()) // 设置subject为用户名
+						.setIssuedAt(new Date(System.currentTimeMillis())) // 设置issuedAt为当前时间
+						.setExpiration(new Date(System.currentTimeMillis() + expiration)) // 设置过期时间
+						.signWith(getSigningKey(), SignatureAlgorithm.HS256) // 使用HS256算法进行签名
+						.compact(); // 将JWT token构建器中的信息压缩为一个字符串
 	}
 
 	private Long expiration() {
+		// 返回当前时间加上一天的时间戳
 		return new Date(System.currentTimeMillis() + 1000 * 60 * 24).getTime();
 	}
 }

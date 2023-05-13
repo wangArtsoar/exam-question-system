@@ -4,6 +4,7 @@ import com.xiaoyi.springsecurity.config.JwtUtils;
 import com.xiaoyi.springsecurity.user.User;
 import com.xiaoyi.springsecurity.user.UserRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,7 @@ public class AuthenticationService {
 	private final AuthenticationManager manager;
 	private final UserRepo userRepo;
 	private final PasswordEncoder passwordEncoder;
+	private final RedisTemplate<String, Object> redisTemplate;
 
 	public AuthenticationResponse register(RegisterRequest request) {
 		// 验证注册是否重复
@@ -41,7 +43,10 @@ public class AuthenticationService {
 		// 写入数据库
 		userRepo.save(user);
 		// 生成token
-		return AuthenticationResponse.builder().token(jwtUtils.generateToken(user)).build();
+		String token = jwtUtils.generateToken(user);
+		// 保存token
+		redisTemplate.opsForValue().append(user.getEmail(), token);
+		return AuthenticationResponse.builder().token(token).build();
 	}
 
 	public AuthenticationResponse login(LoginRequest request) {
@@ -52,7 +57,12 @@ public class AuthenticationService {
 		));
 		// 验证数据库
 		User user = userRepo.findByEmail(request.getEmail()).orElseThrow();
+		// 清空token by user_email
+		redisTemplate.delete(user.getEmail());
 		// 生成token
-		return AuthenticationResponse.builder().token(jwtUtils.generateToken(user)).build();
+		String token = jwtUtils.generateToken(user);
+		// 保存token
+		redisTemplate.opsForValue().append(user.getEmail(), token);
+		return AuthenticationResponse.builder().token(token).build();
 	}
 }

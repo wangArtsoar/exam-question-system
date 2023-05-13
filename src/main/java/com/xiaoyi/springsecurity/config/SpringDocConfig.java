@@ -17,15 +17,15 @@ import org.springframework.context.annotation.Configuration;
  */
 @Configuration
 public class SpringDocConfig {
-		@Bean
-		public OpenAPI mallTinyOpenAPI() {
-			return new OpenAPI()
-					.info(new Info().title("Demo API")
-							.description("SpringDoc API")
-							.version("v1.0.0")
-							.license(new License().name("Apache 2.0").url("https://github.com/Tom-Collection/spring" +
-									"-security")))
-					.externalDocs(new ExternalDocumentation()
-							.description("Spring Boot 3 + Spring Security 6 + JWT"));
-		}
+	@Bean
+	public OpenAPI mallTinyOpenAPI() {
+		return new OpenAPI()
+						.info(new Info().title("Demo API")
+										.description("SpringDoc API")
+										.version("v1.0.0")
+										.license(new License().name("Apache 2.0").url("https://github.com/Tom-Collection/spring" +
+														"-security")))
+						.externalDocs(new ExternalDocumentation()
+										.description("Spring Boot 3 + Spring Security 6 + JWT"));
+	}
 }

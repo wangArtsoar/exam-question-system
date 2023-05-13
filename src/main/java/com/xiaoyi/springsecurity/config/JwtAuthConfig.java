@@ -6,6 +6,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,6 +32,7 @@ public class JwtAuthConfig extends OncePerRequestFilter {
 
 	private final JwtUtils jwtUtils;
 	private final UserDetailsService userDetailsService;
+	private final RedisTemplate<String, Object> redisTemplate;
 
 	@Override
 	protected void doFilterInternal(
@@ -60,7 +62,7 @@ public class JwtAuthConfig extends OncePerRequestFilter {
 			// 根据用户邮箱获取用户信息
 			UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
 			// 检查token
-			if (jwtUtils.isTokenValid(jwt, userDetails)) {
+			if (Boolean.TRUE.equals(redisTemplate.hasKey(userEmail)) && jwtUtils.isTokenValid(jwt, userDetails)) {
 				// 创建一个新的UsernamePasswordAuthenticationToken
 				UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
 								new UsernamePasswordAuthenticationToken(
