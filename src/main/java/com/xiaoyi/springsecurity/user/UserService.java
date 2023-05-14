@@ -1,5 +1,9 @@
 package com.xiaoyi.springsecurity.user;
 
+import com.xiaoyi.springsecurity.response.UserResponse;
+
+import java.util.List;
+
 /**
  * @author 王艺翔
  * @description UserService
@@ -10,4 +14,6 @@ package com.xiaoyi.springsecurity.user;
  */
 public interface UserService {
 	UserResponse findByUserEmail(String email);
+
+	List<UserResponse> findAllUser();
 }

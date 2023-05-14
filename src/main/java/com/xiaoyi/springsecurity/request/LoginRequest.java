@@ -1,4 +1,4 @@
-package com.xiaoyi.springsecurity.auth;
+package com.xiaoyi.springsecurity.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

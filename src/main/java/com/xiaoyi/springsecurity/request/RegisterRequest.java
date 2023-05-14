@@ -1,5 +1,6 @@
-package com.xiaoyi.springsecurity.user;
+package com.xiaoyi.springsecurity.request;
 
+import com.xiaoyi.springsecurity.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -7,17 +8,19 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author 王艺翔
- * @description UserResponse
- * @date 2023/5/11 20:30
+ * @description RegisterRequest
+ * @date 2023/5/11 14:45
  * @phone 18318436514
  * @email w2603494062@gmail.com
  * @github https://github.com/Tom-Collection"
  */
 @Builder
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserResponse {
-	private String name;
+@NoArgsConstructor
+public class RegisterRequest {
+	private String username;
+	private String password;
 	private String email;
+	private Role role;
 }

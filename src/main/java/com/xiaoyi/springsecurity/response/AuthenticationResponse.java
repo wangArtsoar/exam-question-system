@@ -1,4 +1,4 @@
-package com.xiaoyi.springsecurity.auth;
+package com.xiaoyi.springsecurity.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;

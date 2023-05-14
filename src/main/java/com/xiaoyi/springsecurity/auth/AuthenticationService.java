@@ -1,6 +1,9 @@
 package com.xiaoyi.springsecurity.auth;
 
 import com.xiaoyi.springsecurity.config.JwtUtils;
+import com.xiaoyi.springsecurity.request.LoginRequest;
+import com.xiaoyi.springsecurity.request.RegisterRequest;
+import com.xiaoyi.springsecurity.response.AuthenticationResponse;
 import com.xiaoyi.springsecurity.user.User;
 import com.xiaoyi.springsecurity.user.UserRepo;
 import lombok.RequiredArgsConstructor;

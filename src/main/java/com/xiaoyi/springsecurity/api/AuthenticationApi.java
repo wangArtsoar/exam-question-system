@@ -1,5 +1,12 @@
-package com.xiaoyi.springsecurity.auth;
+package com.xiaoyi.springsecurity.api;
 
+import com.xiaoyi.springsecurity.auth.AuthenticationService;
+import com.xiaoyi.springsecurity.request.LoginRequest;
+import com.xiaoyi.springsecurity.request.RegisterRequest;
+import com.xiaoyi.springsecurity.response.AuthenticationResponse;
+import com.xiaoyi.springsecurity.user.Role;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@Tag(name = "auth", description = "验证接口")
 public class AuthenticationApi {
 
 	private final AuthenticationService authenticationService;
@@ -31,6 +39,7 @@ public class AuthenticationApi {
 	 */
 	@PostMapping("/register")
 	public ResponseEntity<AuthenticationResponse> Register(@RequestBody RegisterRequest request) {
+		request.setRole(Role.USER);
 		return ResponseEntity.ok(authenticationService.register(request));
 	}
 
@@ -41,6 +50,7 @@ public class AuthenticationApi {
 	 * @return token
 	 */
 	@PostMapping("/login")
+	@Operation(summary = "登录")
 	public ResponseEntity<AuthenticationResponse> Login(@RequestBody LoginRequest request) {
 		return ResponseEntity.ok(authenticationService.login(request));
 	}

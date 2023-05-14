@@ -12,6 +12,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import static com.xiaoyi.springsecurity.user.Permission.*;
+import static com.xiaoyi.springsecurity.user.Role.ADMIN;
+import static org.springframework.http.HttpMethod.*;
+
 /**
  * @author 王艺翔
  * @description SecurityConfig
@@ -48,6 +52,11 @@ public class SecurityConfig {
 										"/swagger-ui.html"
 						)
 						.permitAll()
+						.requestMatchers("/api/admin/**").hasAnyRole(ADMIN.name())
+						.requestMatchers(GET, "/api/admin/**").hasAuthority(ADMIN_READ.name())
+						.requestMatchers(PUT, "/api/admin/**").hasAuthority(ADMIN_UPDATE.name())
+						.requestMatchers(DELETE, "/api/admin/**").hasAuthority(ADMIN_DELETE.name())
+						.requestMatchers(POST, "/api/admin/**").hasAuthority(ADMIN_CREATE.name())
 						.anyRequest()
 						.authenticated()
 						.and()

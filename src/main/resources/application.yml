@@ -5,6 +5,8 @@ spring:
     url: jdbc:postgresql://localhost:5432/demo1
     username: postgres
     password: xiaoyi_wyx
+  profiles:
+    active: dev
   #配置Jpa
   jpa:
     hibernate:
