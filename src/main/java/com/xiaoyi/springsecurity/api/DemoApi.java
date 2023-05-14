@@ -2,6 +2,7 @@ package com.xiaoyi.springsecurity.api;
 
 import com.xiaoyi.springsecurity.user.UserResponse;
 import com.xiaoyi.springsecurity.user.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
+@Tag(name = "demo")
 public class DemoApi {
 
 	private final UserService userService;
