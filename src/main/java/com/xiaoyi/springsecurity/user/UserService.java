@@ -1,5 +1,6 @@
 package com.xiaoyi.springsecurity.user;
 
+import com.xiaoyi.springsecurity.request.RegisterRequest;
 import com.xiaoyi.springsecurity.response.UserResponse;
 
 import java.util.List;
@@ -16,4 +17,6 @@ public interface UserService {
 	UserResponse findByUserEmail(String email);
 
 	List<UserResponse> findAllUser();
+
+	UserResponse save(RegisterRequest request);
 }

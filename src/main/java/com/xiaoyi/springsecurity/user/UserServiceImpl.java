@@ -1,8 +1,11 @@
 package com.xiaoyi.springsecurity.user;
 
+import com.xiaoyi.springsecurity.exception.EmailAlreadyExistedException;
+import com.xiaoyi.springsecurity.request.RegisterRequest;
 import com.xiaoyi.springsecurity.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +23,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
 	private final UserRepo userRepo;
+	private final PasswordEncoder passwordEncoder;
 
 	@Override
 	public UserResponse findByUserEmail(String email) {
@@ -35,4 +39,20 @@ public class UserServiceImpl implements UserService {
 						user -> UserResponse.builder().name(user.getName()).email(user.getEmail())
 										.role(user.getRole()).build()).toList();
 	}
+
+	@Override
+	public UserResponse save(RegisterRequest request) {
+		if (userRepo.findByEmail(request.getEmail()).isPresent()) {
+			throw new EmailAlreadyExistedException("the email has existed");
+		}
+		User save = userRepo.save(User.builder()
+						.name(request.getUsername())
+						.email(request.getEmail())
+						.pwd(passwordEncoder.encode(request.getPassword()))
+						.role(request.getRole()).build());
+		UserResponse userResponse = new UserResponse();
+		BeanUtils.copyProperties(save, userResponse);
+		return userResponse;
+	}
+
 }

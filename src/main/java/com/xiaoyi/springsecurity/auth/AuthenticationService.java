@@ -1,6 +1,7 @@
 package com.xiaoyi.springsecurity.auth;
 
 import com.xiaoyi.springsecurity.config.JwtUtils;
+import com.xiaoyi.springsecurity.exception.EmailAlreadyExistedException;
 import com.xiaoyi.springsecurity.request.LoginRequest;
 import com.xiaoyi.springsecurity.request.RegisterRequest;
 import com.xiaoyi.springsecurity.response.AuthenticationResponse;
@@ -33,8 +34,8 @@ public class AuthenticationService {
 
 	public AuthenticationResponse register(RegisterRequest request) {
 		// 验证注册是否重复
-		if (!userRepo.findByEmail(request.getEmail()).isEmpty())
-			return new AuthenticationResponse(null, "user has existed");
+		if (userRepo.findByEmail(request.getEmail()).isPresent())
+			throw new EmailAlreadyExistedException("the email has existed");
 		// 创建user
 		var user = User
 						.builder()

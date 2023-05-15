@@ -21,5 +21,4 @@ import lombok.NoArgsConstructor;
 public class AuthenticationResponse {
 	@JsonProperty("access-token")
 	private String token;
-	private String error;
 }
