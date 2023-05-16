@@ -1,10 +1,14 @@
 package com.xiaoyi.springsecurity.user;
 
 import com.xiaoyi.springsecurity.exception.EmailAlreadyExistedException;
+import com.xiaoyi.springsecurity.exception.EmailNotFoundException;
 import com.xiaoyi.springsecurity.request.RegisterRequest;
 import com.xiaoyi.springsecurity.response.UserResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -24,10 +28,13 @@ public class UserServiceImpl implements UserService {
 
 	private final UserRepo userRepo;
 	private final PasswordEncoder passwordEncoder;
+	private final RedisTemplate<String, Object> redisTemplate;
+	private final AuthenticationManager manager;
 
 	@Override
 	public UserResponse findByUserEmail(String email) {
-		User user = userRepo.findByEmail(email).orElseThrow();
+		User user = userRepo.findByEmail(email)
+						.orElseThrow(() -> new EmailNotFoundException("Email not found: " + email));
 		UserResponse userResponse = new UserResponse();
 		BeanUtils.copyProperties(user, userResponse);
 		return userResponse;
@@ -53,6 +60,15 @@ public class UserServiceImpl implements UserService {
 		UserResponse userResponse = new UserResponse();
 		BeanUtils.copyProperties(save, userResponse);
 		return userResponse;
+	}
+
+	@Override
+	public String applyDelUser(String email, String password) {
+		manager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
+		if (Boolean.TRUE.equals(redisTemplate.hasKey(email))) {
+			return "申请成功";
+		}
+		return "申请失败";
 	}
 
 }

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1")
 @RequiredArgsConstructor
-@Tag(name = "user", description = "用户接口")
+@Tag(name = "用户接口")
 public class UserApi {
 
 	private final UserService userService;
@@ -31,5 +31,11 @@ public class UserApi {
 	@Operation(summary = "根据email查询用户")
 	public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String email) {
 		return ResponseEntity.ok(userService.findByUserEmail(email));
+	}
+
+	@PutMapping("/applyDel{email}{password}")
+	@Operation(summary = "申请删除用户")
+	public ResponseEntity<String> applyDelUser(@PathVariable String email, @PathVariable String password) {
+		return ResponseEntity.ok(userService.applyDelUser(email, password));
 	}
 }

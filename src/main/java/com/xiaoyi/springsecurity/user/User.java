@@ -31,6 +31,7 @@ public class User implements UserDetails {
 	private String name;
 	private String email;
 	private String pwd;
+	private String isDelete;
 
 	@Enumerated(EnumType.STRING)
 	private Role role;

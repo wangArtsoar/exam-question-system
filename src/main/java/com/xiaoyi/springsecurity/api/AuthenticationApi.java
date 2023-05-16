@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
-@Tag(name = "auth", description = "验证接口")
+@Tag(name = "验证接口")
 public class AuthenticationApi {
 
 	private final AuthenticationService authenticationService;
@@ -38,6 +38,7 @@ public class AuthenticationApi {
 	 * @return token
 	 */
 	@PostMapping("/register")
+	@Operation(summary = "注册")
 	public ResponseEntity<AuthenticationResponse> Register(@RequestBody RegisterRequest request) {
 		request.setRole(Role.USER);
 		return ResponseEntity.ok(authenticationService.register(request));

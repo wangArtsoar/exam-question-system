@@ -19,4 +19,6 @@ public interface UserService {
 	List<UserResponse> findAllUser();
 
 	UserResponse save(RegisterRequest request);
+
+	String applyDelUser(String email, String password);
 }
