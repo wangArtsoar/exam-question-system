@@ -30,6 +30,7 @@ public class Question {
 	private String answer;
 	@Column(columnDefinition = "TEXT")
 	private String answerExplain;
-	private Integer type;
+	@Enumerated(EnumType.STRING)
+	private QuestionType type;
 	private Double score;
 }

@@ -2,6 +2,7 @@ package com.xiaoyi.springsecurity.domain.user;
 
 import com.xiaoyi.springsecurity.api.request.RegisterRequest;
 import com.xiaoyi.springsecurity.api.response.UserResponse;
+import com.xiaoyi.springsecurity.domain.user.entity.User;
 import com.xiaoyi.springsecurity.infrastructure.exception.EmailAlreadyExistedException;
 import com.xiaoyi.springsecurity.infrastructure.exception.EmailNotFoundException;
 import lombok.RequiredArgsConstructor;

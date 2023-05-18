@@ -40,7 +40,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(value = CreateFailedException.class)
 	@ResponseBody
 	public ResponseEntity<String> handleCreateFailedException(CreateFailedException e) {
-		return ResponseEntity.status(INTERNAL_SERVER_ERROR).body("添加失败" + e.getMessage());
+		return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(e.getMessage());
 	}
 }
 

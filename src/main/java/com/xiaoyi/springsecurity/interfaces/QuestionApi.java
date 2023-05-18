@@ -32,7 +32,7 @@ public class QuestionApi {
 	@PostMapping("create")
 	@Operation(summary = "创建问题")
 	@PreAuthorize("hasAuthority('teacher:create')")
-	public ResponseEntity<QuestionResponse> createQuestion(@RequestBody QuestionRequest request) {
+	public ResponseEntity<QuestionResponse> saveQuestion(@RequestBody QuestionRequest request) {
 		return ResponseEntity.ok(questionService.saveQuestion(request));
 	}
 

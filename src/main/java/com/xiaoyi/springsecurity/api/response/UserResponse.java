@@ -1,6 +1,6 @@
 package com.xiaoyi.springsecurity.api.response;
 
-import com.xiaoyi.springsecurity.domain.user.Role;
+import com.xiaoyi.springsecurity.domain.user.entity.Role;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

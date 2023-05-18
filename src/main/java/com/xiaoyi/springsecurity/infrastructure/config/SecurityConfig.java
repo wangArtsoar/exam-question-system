@@ -12,9 +12,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import static com.xiaoyi.springsecurity.domain.user.Permission.*;
-import static com.xiaoyi.springsecurity.domain.user.Role.ADMIN;
-import static com.xiaoyi.springsecurity.domain.user.Role.TEACHER;
+import static com.xiaoyi.springsecurity.domain.user.entity.Permission.*;
+import static com.xiaoyi.springsecurity.domain.user.entity.Role.ADMIN;
+import static com.xiaoyi.springsecurity.domain.user.entity.Role.TEACHER;
 import static org.springframework.http.HttpMethod.*;
 
 /**

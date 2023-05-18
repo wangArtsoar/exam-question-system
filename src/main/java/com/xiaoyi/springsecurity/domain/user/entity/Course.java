@@ -1,6 +1,6 @@
-package com.xiaoyi.springsecurity.api.request;
+package com.xiaoyi.springsecurity.domain.user.entity;
 
-import com.xiaoyi.springsecurity.domain.user.entity.Role;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,19 +8,23 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author 王艺翔
- * @description RegisterRequest
- * @date 2023/5/11 14:45
+ * @description Couse
+ * @date 2023/5/18 23:38
  * @phone 18318436514
  * @email w2603494062@gmail.com
  * @github https://github.com/Tom-Collection"
  */
 @Builder
 @Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
-	private String username;
-	private String password;
-	private String email;
-	private Role role;
+@Table(name = "_course")
+public class Course {
+	@Id
+	@GeneratedValue
+	private Integer id;
+	private String name;
+	@OneToOne
+	private User user;
 }

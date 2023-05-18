@@ -1,4 +1,4 @@
-package com.xiaoyi.springsecurity.domain.user;
+package com.xiaoyi.springsecurity.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

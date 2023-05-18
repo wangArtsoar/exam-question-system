@@ -2,8 +2,8 @@ package com.xiaoyi.springsecurity.interfaces;
 
 import com.xiaoyi.springsecurity.api.request.RegisterRequest;
 import com.xiaoyi.springsecurity.api.response.UserResponse;
-import com.xiaoyi.springsecurity.domain.user.Role;
 import com.xiaoyi.springsecurity.domain.user.UserService;
+import com.xiaoyi.springsecurity.domain.user.entity.Role;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

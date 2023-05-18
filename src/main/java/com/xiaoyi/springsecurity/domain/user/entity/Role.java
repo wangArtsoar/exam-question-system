@@ -1,4 +1,4 @@
-package com.xiaoyi.springsecurity.domain.user;
+package com.xiaoyi.springsecurity.domain.user.entity;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static com.xiaoyi.springsecurity.domain.user.Permission.*;
+import static com.xiaoyi.springsecurity.domain.user.entity.Permission.*;
 
 /**
  * @author 王艺翔
