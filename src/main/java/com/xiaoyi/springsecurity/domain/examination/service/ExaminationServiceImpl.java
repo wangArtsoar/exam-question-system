@@ -1,9 +1,13 @@
 package com.xiaoyi.springsecurity.domain.examination.service;
 
 import com.xiaoyi.springsecurity.api.request.ExamRequest;
-import com.xiaoyi.springsecurity.api.response.*;
+import com.xiaoyi.springsecurity.api.response.AnswerExamResponse;
+import com.xiaoyi.springsecurity.api.response.AnswerQuestionResponse;
+import com.xiaoyi.springsecurity.api.response.ExamResponse;
+import com.xiaoyi.springsecurity.api.response.QuestionResponse;
 import com.xiaoyi.springsecurity.domain.examination.entity.Examination;
 import com.xiaoyi.springsecurity.domain.examination.repo.ExaminationRepo;
+import com.xiaoyi.springsecurity.domain.question_bank.entity.Option;
 import com.xiaoyi.springsecurity.domain.question_bank.entity.Question;
 import com.xiaoyi.springsecurity.domain.question_bank.repo.OptionRepo;
 import com.xiaoyi.springsecurity.domain.question_bank.serivce.QuestionService;
@@ -25,6 +29,8 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author 王艺翔
@@ -95,24 +101,29 @@ public class ExaminationServiceImpl implements ExaminationService {
 		Examination examination = examinationRepo.findById(id).orElseThrow();
 		// 设置值
 		Double totalScore = null;
-		List<AnswerQuestionResponse> list = new ArrayList<>();
+		List<Integer> questionIds = new ArrayList<>();
 		for (Question question : examination.getQuestions()) {
-			List<OptionResponse> optionResponses = Utils.toOptionResponseList(
-							optionRepo.findByQuestionId(question.getId()));
+			questionIds.add(question.getId());
+			totalScore += question.getScore();
+		}
+		// 查询Option
+		List<Option> options = optionRepo.findByQuestionIdIn(questionIds);
+		// 提取option到AnswerQuestionResponse
+		Map<Integer, List<Option>> map = options.stream().collect(Collectors.groupingBy(Option::getQuestionId));
+		List<AnswerQuestionResponse> list = new ArrayList<>();
+		map.forEach((k, v) -> {
+			Question question = examination.getQuestions().get(k);
 			list.add(AnswerQuestionResponse.builder()
 							.score(question.getScore())
 							.topic(question.getTopic())
 							.type(question.getType())
-							.optionResponses(optionResponses)
-							.build());
-			totalScore += question.getScore();
-		}
+							.optionResponses(Utils.toOptionResponseList(v)).build());
+		});
 		return AnswerExamResponse.builder()
 						.answerQuestionResponses(list)
 						.limitTime(examination.getLimitedTime())
 						.username(user.getName())
 						.totalScore(totalScore)
-						.name(examination.getName())
-						.build();
+						.name(examination.getName()).build();
 	}
 }
