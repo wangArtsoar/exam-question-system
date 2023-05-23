@@ -1,5 +1,6 @@
 package com.xiaoyi.springsecurity.api.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +19,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class CourseRequest {
+	@Schema(description = "课程名称")
 	private String name;
+	@Schema(description = "科任老师")
 	private String teacher;
+	@Schema(description = "老师邮箱")
 	private String teacherEmail;
 }

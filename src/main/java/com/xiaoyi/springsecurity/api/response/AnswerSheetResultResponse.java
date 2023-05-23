@@ -1,5 +1,6 @@
 package com.xiaoyi.springsecurity.api.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,9 +19,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswerSheetResultResponse {
+	@Schema(description = "答题人")
 	private String username;
+	@Schema(description = "试卷名称")
 	private String examinationName;
+	@Schema(description = "完成时长")
 	private Long compactTime;
+	@Schema(description = "限时")
 	private Long limitTime;
+	@Schema(description = "总分")
 	private Double totalScore;
 }

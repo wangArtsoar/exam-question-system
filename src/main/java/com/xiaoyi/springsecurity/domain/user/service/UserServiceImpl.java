@@ -3,6 +3,7 @@ package com.xiaoyi.springsecurity.domain.user.service;
 import com.xiaoyi.springsecurity.api.request.CourseRequest;
 import com.xiaoyi.springsecurity.api.request.RegisterRequest;
 import com.xiaoyi.springsecurity.api.request.TeamRequest;
+import com.xiaoyi.springsecurity.api.response.CourseResponse;
 import com.xiaoyi.springsecurity.api.response.TeamResponse;
 import com.xiaoyi.springsecurity.api.response.UserResponse;
 import com.xiaoyi.springsecurity.domain.user.entity.Course;
@@ -17,6 +18,7 @@ import com.xiaoyi.springsecurity.infrastructure.exception.EmailAlreadyExistedExc
 import com.xiaoyi.springsecurity.infrastructure.exception.EmailNotFoundException;
 import com.xiaoyi.springsecurity.infrastructure.exception.JoinException;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -30,6 +32,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author 王艺翔
@@ -44,6 +47,8 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
 	private final JwtUtils jwtUtils;
+	@NonNull
+	private final HttpServletRequest request;
 	private final UserRepo userRepo;
 	private final CourseRepo courseRepo;
 	private final TeamRepo teamRepo;
@@ -94,9 +99,9 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public String joinTeam(Integer teamId, HttpServletRequest request) {
+	public String joinTeam(Integer teamId) {
 		// 获取jwt token
-		String authHeader = request.getHeader("Authentication");
+		String authHeader = request.getHeader("Authorization");
 		final String jwt;
 		if (authHeader == null || !authHeader.startsWith("Bearer ")) {
 			throw new JoinException("加入失败");
@@ -109,10 +114,11 @@ public class UserServiceImpl implements UserService {
 		// 获取user
 		User user = userRepo.findByEmail(email).orElseThrow();
 		List<User> students = team.getStudents();
-		if (students.get(user.getId()) != null) {
+		if (!students.isEmpty() && students.get(user.getId()) != null) {
 			return "您已加入该班级";
 		}
-		students.set(user.getId(), user);
+		students.add(user);
+		team.setStudents(students);
 		teamRepo.save(team);
 		return "加入成功";
 	}
@@ -121,14 +127,15 @@ public class UserServiceImpl implements UserService {
 	public void createTeam(TeamRequest request) {
 		TransactionStatus status = transactionManager.getTransaction(new DefaultTransactionDefinition());
 		try {
-			List<Course> courseList = toCourseList(request.getCourses());
-			courseRepo.saveAll(courseList);
+			List<Course> courseList = courseRepo.saveAll(toCourseList(request.getCourses()));
 			User user = userRepo.findByEmail(request.getHeadTeacherEmail()).orElseThrow();
 			var team = Team.builder()
 							.name(request.getName())
 							.specialty(request.getSpecialty())
 							.grade(request.getGrade())
-							.headTeacher(user).build();
+							.headTeacher(user)
+							.courses(courseList)
+							.build();
 			teamRepo.save(team);
 			transactionManager.commit(status);
 		} catch (Exception e) {
@@ -140,9 +147,25 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public TeamResponse getTeamById(Integer teamId) {
 		Team team = teamRepo.findById(teamId).orElseThrow();
-		TeamResponse teamResponse = new TeamResponse();
-		BeanUtils.copyProperties(team, teamResponse);
-		return teamResponse;
+		return TeamResponse.builder()
+						.headTeacher(team.getHeadTeacher().getName())
+						.specialty(team.getSpecialty().name())
+						.grade(team.getGrade().name())
+						.name(team.getName())
+						.courses(team.getCourses().stream()
+										.map(course -> CourseResponse.builder()
+														.name(course.getName())
+														.teacher(course.getTeacher().getName())
+														.build())
+										.collect(Collectors.toList()))
+						.students(team.getStudents().stream()
+										.map(student -> UserResponse.builder()
+														.name(student.getName())
+														.email(student.getEmail())
+														.role(student.getRole())
+														.build())
+										.collect(Collectors.toList()))
+						.build();
 	}
 
 	private List<Course> toCourseList(List<CourseRequest> courses) {

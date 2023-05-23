@@ -1,6 +1,7 @@
 package com.xiaoyi.springsecurity.api.response;
 
 import com.xiaoyi.springsecurity.domain.examination.entity.CompleteLevel;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,9 +23,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswerSheetDetailResponse {
+	@Schema(description = "答题人")
 	private String username;
+	@Schema(description = "总分")
 	private Double totalScore;
+	@Schema(description = "答题时间")
 	private Date answerDate;
+	@Schema(description = "回答程度")
 	private CompleteLevel level;
+	@Schema(description = "回答合集")
 	private List<RespondResponse> respondResponses;
 }

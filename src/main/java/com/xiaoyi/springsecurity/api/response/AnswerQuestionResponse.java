@@ -1,6 +1,7 @@
 package com.xiaoyi.springsecurity.api.response;
 
 import com.xiaoyi.springsecurity.domain.question_bank.entity.QuestionType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,8 +22,12 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AnswerQuestionResponse {
+	@Schema(description = "题目")
 	private String topic;
+	@Schema(description = "题目类型")
 	private QuestionType type;
+	@Schema(description = "分数")
 	private Double score;
+	@Schema(description = "选项合集")
 	private List<OptionResponse> optionResponses;
 }

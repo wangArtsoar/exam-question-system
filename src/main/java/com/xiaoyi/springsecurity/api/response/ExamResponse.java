@@ -1,5 +1,6 @@
 package com.xiaoyi.springsecurity.api.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,10 +22,16 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExamResponse {
+	@Schema(description = "名称")
 	private String name;
+	@Schema(description = "简介")
 	private String description;
+	@Schema(description = "限时")
 	private Long limitedTime; // 1000 * 60 * 60 * 1.2 = 120min
+	@Schema(description = "作者")
 	private String author;
+	@Schema(description = "创建时间")
 	private Date createTime;
+	@Schema(description = "题目合集")
 	private List<QuestionResponse> questions;
 }

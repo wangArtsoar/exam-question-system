@@ -1,5 +1,6 @@
 package com.xiaoyi.springsecurity.api.response;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OptionResponse {
+	@Schema(description = "选项内容")
 	private String content;
+	@Schema(description = "是否正确")
 	private boolean isTure;
 }

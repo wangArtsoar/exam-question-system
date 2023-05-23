@@ -20,10 +20,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResponse {
-	@Schema(name = "用户昵称")
+	@Schema(description = "用户昵称")
 	private String name;
-	@Schema(name = "用户邮箱")
+	@Schema(description = "用户邮箱")
 	private String email;
-	@Schema(name = "用户角色")
+	@Schema(description = "用户角色")
 	private Role role;
 }

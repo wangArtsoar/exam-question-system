@@ -5,7 +5,6 @@ import com.xiaoyi.springsecurity.api.response.UserResponse;
 import com.xiaoyi.springsecurity.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +39,8 @@ public class UserApi {
 
 	@PutMapping("/joinTeam{teamId}")
 	@Operation(summary = "加入班级")
-	public ResponseEntity<String> joinTeam(@PathVariable Integer teamId, HttpServletRequest request) {
-		return ResponseEntity.ok(userService.joinTeam(teamId, request));
+	public ResponseEntity<String> joinTeam(@PathVariable Integer teamId) {
+		return ResponseEntity.ok(userService.joinTeam(teamId));
 	}
 
 	@GetMapping("/getTeamById")

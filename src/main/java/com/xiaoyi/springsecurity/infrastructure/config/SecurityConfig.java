@@ -14,7 +14,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import static com.xiaoyi.springsecurity.domain.user.entity.Permission.*;
 import static com.xiaoyi.springsecurity.domain.user.entity.Role.ADMIN;
-import static com.xiaoyi.springsecurity.domain.user.entity.Role.TEACHER;
 import static org.springframework.http.HttpMethod.*;
 
 /**
@@ -58,11 +57,11 @@ public class SecurityConfig {
 						.requestMatchers(PUT, "/api/admin/**").hasAuthority(ADMIN_UPDATE.name())
 						.requestMatchers(DELETE, "/api/admin/**").hasAuthority(ADMIN_DELETE.name())
 						.requestMatchers(POST, "/api/admin/**").hasAuthority(ADMIN_CREATE.name())
-						.requestMatchers("/api/question/**").hasAnyRole(TEACHER.name())
-						.requestMatchers(GET, "/api/question/**").hasAuthority(TEACHER_READ.name())
-						.requestMatchers(PUT, "/api/question/**").hasAuthority(TEACHER_UPDATE.name())
-						.requestMatchers(DELETE, "/api/question/**").hasAuthority(TEACHER_DELETE.name())
-						.requestMatchers(POST, "/api/question/**").hasAuthority(TEACHER_CREATE.name())
+//						.requestMatchers("/api/question/**").hasAnyRole(TEACHER.name())
+//						.requestMatchers(GET, "/api/question/**").hasAuthority(TEACHER_READ.name())
+//						.requestMatchers(PUT, "/api/question/**").hasAuthority(TEACHER_UPDATE.name())
+//						.requestMatchers(DELETE, "/api/question/**").hasAuthority(TEACHER_DELETE.name())
+//						.requestMatchers(POST, "/api/question/**").hasAuthority(TEACHER_CREATE.name())
 						.anyRequest()
 						.authenticated()
 						.and()

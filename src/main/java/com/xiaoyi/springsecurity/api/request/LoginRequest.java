@@ -1,5 +1,6 @@
 package com.xiaoyi.springsecurity.api.request;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +19,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class LoginRequest {
+	@Schema(description = "用户邮箱")
 	private String email;
+	@Schema(description = "密码")
 	private String password;
 }

@@ -2,6 +2,7 @@ package com.xiaoyi.springsecurity.api.response;
 
 import com.xiaoyi.springsecurity.domain.question_bank.entity.Difficulty;
 import com.xiaoyi.springsecurity.domain.question_bank.entity.QuestionType;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,18 +23,18 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionResponse {
-	//	题目
+	@Schema(description = "题目")
 	private String topic;
-	//	答案
+	@Schema(description = "答案")
 	private String answer;
-	//	答案解释
+	@Schema(description = "答案解释")
 	private String answerExplain;
-	//	类型
+	@Schema(description = "类型")
 	private QuestionType type;
-	//	分数
+	@Schema(description = "分数")
 	private Double score;
-	//  难度
+	@Schema(description = "难度")
 	private Difficulty difficulty;
-	//	选项
+	@Schema(description = "选项")
 	private List<OptionResponse> options;
 }

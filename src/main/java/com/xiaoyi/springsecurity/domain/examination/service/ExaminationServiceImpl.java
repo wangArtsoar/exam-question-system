@@ -73,6 +73,7 @@ public class ExaminationServiceImpl implements ExaminationService {
 							.build());
 			// 转换ExamResponse
 			ExamResponse examResponse = new ExamResponse();
+			// TODO 转换为ExamResponse
 			BeanUtils.copyProperties(examination, examResponse);
 			manager.commit(status);
 			return examResponse;
@@ -84,18 +85,20 @@ public class ExaminationServiceImpl implements ExaminationService {
 
 	@Override
 	public ExamResponse findExamById(Integer id) {
+		// TODO 查询试卷
 		return null;
 	}
 
 	@Override
 	public Page<ExamResponse> findExamList(Pageable pageable) {
+		// TODO 分页操作
 		return examinationRepo.findAll(pageable).map(examination -> ExamResponse.builder().build());
 	}
 
 	@Override
 	public AnswerExamResponse startAnswerById(Integer id) {
 		// 获取user
-		String jwt = Utils.getJwt(request.getHeader("Authentication"));
+		String jwt = Utils.getJwt(request.getHeader("Authorization"));
 		User user = userRepo.findByEmail(jwtUtils.extractUserEmail(jwt)).orElseThrow();
 		// 查询exam
 		Examination examination = examinationRepo.findById(id).orElseThrow();

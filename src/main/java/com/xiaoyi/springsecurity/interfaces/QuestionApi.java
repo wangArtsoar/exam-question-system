@@ -23,7 +23,6 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/question")
-@PreAuthorize("hasRole('TEACHER')")
 @Tag(name = "问题接口")
 public class QuestionApi {
 
@@ -38,7 +37,6 @@ public class QuestionApi {
 
 	@GetMapping("find")
 	@Operation(summary = "查询问题")
-	@PreAuthorize("hasAuthority('teacher:read')")
 	public ResponseEntity<List<QuestionResponse>> findAllQuestion() {
 		return ResponseEntity.ok(questionService.findAllQuestion());
 	}

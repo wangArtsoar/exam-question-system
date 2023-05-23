@@ -4,7 +4,6 @@ import com.xiaoyi.springsecurity.api.request.RegisterRequest;
 import com.xiaoyi.springsecurity.api.request.TeamRequest;
 import com.xiaoyi.springsecurity.api.response.TeamResponse;
 import com.xiaoyi.springsecurity.api.response.UserResponse;
-import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public interface UserService {
 
 	String applyDelUser(String email, String password);
 
-	String joinTeam(Integer teamId, HttpServletRequest request);
+	String joinTeam(Integer teamId);
 
 	void createTeam(TeamRequest request);
 

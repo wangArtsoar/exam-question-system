@@ -2,6 +2,7 @@ package com.xiaoyi.springsecurity.api.request;
 
 import com.xiaoyi.springsecurity.domain.user.entity.Grade;
 import com.xiaoyi.springsecurity.domain.user.entity.Specialty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,10 +23,16 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TeamRequest {
+	@Schema(description = "班级名称")
 	private String name;
+	@Schema(description = "专业")
 	private Specialty specialty;
+	@Schema(description = "年级")
 	private Grade grade;
+	@Schema(description = "班主任/导员")
 	private String headTeacher;
+	@Schema(description = "班主任/导员 邮箱")
 	private String headTeacherEmail;
+	@Schema(description = "课程合集")
 	private List<CourseRequest> courses;
 }
