@@ -25,4 +25,5 @@ public class Option {
 	private Integer questionId;
 	@Column(columnDefinition = "TEXT")
 	private String content;
+	private boolean isTrue;
 }

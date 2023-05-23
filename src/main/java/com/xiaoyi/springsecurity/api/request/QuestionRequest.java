@@ -1,5 +1,6 @@
 package com.xiaoyi.springsecurity.api.request;
 
+import com.xiaoyi.springsecurity.domain.question_bank.entity.Difficulty;
 import com.xiaoyi.springsecurity.domain.question_bank.entity.Option;
 import com.xiaoyi.springsecurity.domain.question_bank.entity.QuestionType;
 import lombok.AllArgsConstructor;
@@ -24,7 +25,7 @@ import java.util.List;
 public class QuestionRequest {
 	//	题目
 	private String topic;
-	//	答案
+	//  答案
 	private String answer;
 	//	答案解释
 	private String answerExplain;
@@ -32,6 +33,8 @@ public class QuestionRequest {
 	private QuestionType type;
 	//	分数
 	private Double score;
+	//  难度
+	private Difficulty difficulty;
 	//	选项
 	private List<Option> options;
 }

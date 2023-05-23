@@ -26,5 +26,5 @@ public class Course {
 	private Integer id;
 	private String name;
 	@OneToOne
-	private User user;
+	private User teacher;
 }

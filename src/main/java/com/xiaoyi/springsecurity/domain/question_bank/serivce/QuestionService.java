@@ -14,7 +14,7 @@ import java.util.List;
  * @github https://github.com/Tom-Collection"
  */
 public interface QuestionService {
-	QuestionResponse saveQuestion(QuestionRequest request);
+	List<QuestionResponse> saveQuestion(List<QuestionRequest> requests);
 
 	List<QuestionResponse> findAllQuestion();
 }

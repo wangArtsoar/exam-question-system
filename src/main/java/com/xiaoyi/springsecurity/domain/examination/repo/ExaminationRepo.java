@@ -2,6 +2,7 @@ package com.xiaoyi.springsecurity.domain.examination.repo;
 
 import com.xiaoyi.springsecurity.domain.examination.entity.Examination;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 /**
  * @author 王艺翔
@@ -11,5 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @email w2603494062@gmail.com
  * @github https://github.com/Tom-Collection"
  */
-public interface ExaminationRepo extends JpaRepository<Examination, Integer> {
+public interface ExaminationRepo extends
+				PagingAndSortingRepository<Examination, Integer>,
+				JpaRepository<Examination, Integer> {
 }

@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+/src/test/java/com/xiaoyi/springsecurity/test/LotteryPage.java
+/src/test/java/com/xiaoyi/springsecurity/test/Lottery.java
+/src/test/java/com/xiaoyi/springsecurity/test/Lottery01.java
+/src/test/java/com/xiaoyi/springsecurity/test/

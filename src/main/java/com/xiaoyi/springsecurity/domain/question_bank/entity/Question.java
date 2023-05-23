@@ -32,5 +32,7 @@ public class Question {
 	private String answerExplain;
 	@Enumerated(EnumType.STRING)
 	private QuestionType type;
+	@Enumerated(EnumType.ORDINAL)
+	private Difficulty difficulty;
 	private Double score;
 }

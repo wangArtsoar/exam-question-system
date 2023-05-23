@@ -1,17 +1,17 @@
 package com.xiaoyi.springsecurity.interfaces;
 
 import com.xiaoyi.springsecurity.api.request.ExamRequest;
+import com.xiaoyi.springsecurity.api.response.AnswerExamResponse;
 import com.xiaoyi.springsecurity.api.response.ExamResponse;
 import com.xiaoyi.springsecurity.domain.examination.service.ExaminationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author 王艺翔
@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/exam")
 @RequiredArgsConstructor
 @Tag(name = "试卷接口")
-@PreAuthorize("hasRole('TEACHER')")
 public class ExamApi {
 
 	private final ExaminationService examinationService;
@@ -35,5 +34,25 @@ public class ExamApi {
 	@PreAuthorize("hasAuthority('teacher:create')")
 	public ResponseEntity<ExamResponse> createExam(@RequestBody ExamRequest request) {
 		return ResponseEntity.ok(examinationService.saveExam(request));
+	}
+
+	@PutMapping("findById{id}")
+	@Operation(summary = "根据id查询试卷")
+	public ResponseEntity<ExamResponse> findExamById(@PathVariable Integer id) {
+		return ResponseEntity.ok(examinationService.findExamById(id));
+	}
+
+	@GetMapping("findList")
+	@Operation(summary = "试卷分页")
+	public Page<ExamResponse> findExamList(
+					@RequestParam(value = "page", defaultValue = "0") int page,
+					@RequestParam(value = "size", defaultValue = "10") int size) {
+		return examinationService.findExamList(PageRequest.of(page, size));
+	}
+
+	@PutMapping("answerById{id}")
+	@Operation(summary = "开始答卷")
+	public ResponseEntity<AnswerExamResponse> startAnswerExam(@PathVariable Integer id) {
+		return ResponseEntity.ok(examinationService.startAnswerById(id));
 	}
 }

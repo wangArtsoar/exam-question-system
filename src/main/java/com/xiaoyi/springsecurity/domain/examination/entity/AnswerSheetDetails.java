@@ -31,6 +31,9 @@ public class AnswerSheetDetails {
 	@JoinColumn(name = "user_id")
 	private User user;
 	private Long compactTime; // 答题时间
+	@Enumerated(EnumType.STRING)
+	private CompleteLevel level;
 	@OneToMany
 	private List<Respond> responds;
+
 }

@@ -1,4 +1,4 @@
-package com.xiaoyi.springsecurity.domain.user;
+package com.xiaoyi.springsecurity.domain.user.repo;
 
 import com.xiaoyi.springsecurity.domain.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;

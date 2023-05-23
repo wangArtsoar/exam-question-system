@@ -1,0 +1,74 @@
+[
+  // "AuthenticationApi"
+  [
+    // 登录 login LoginRequest
+    {
+      "email": "string",
+      "password": "string"
+    },
+    // 注册 register RegisterRequest
+    {
+      "username": "string",
+      "email": "string",
+      "password": "string",
+      "role": "USER"
+    }
+  ],
+  // "AdminApi"
+  [
+    // 创建班级 createTeam TeamRequest
+    {
+      "name": "string",
+      "specialty": "MATHEMATICS",
+      "grade": "DA_YI",
+      "headTeacher": "string",
+      "headTeacherEmail": "string",
+      "courses": [
+        {
+          "name": "string",
+          "teacher": "string",
+          "teacherEmail": "string"
+        }
+      ]
+    }
+  ],
+  // "QuestionApi"
+  [
+    // 创建问题 create QuestionRequest
+    {
+      "topic": "string",
+      "answerExplain": "string",
+      "type": "SHORT_ANSWER",
+      "score": 0,
+      "options": [
+        {
+          "id": 0,
+          "questionId": 0,
+          "content": "string",
+          "true": true
+        }
+      ]
+    }
+  ],
+  // "ExamApi"
+  [
+    // 创建试卷 save ExamRequest
+    {
+      "name": "string",
+      "description": "string",
+      "limitedTime": 0,
+      "author": "string",
+      "questions": [
+        {
+          "id": 0,
+          "topic": "string",
+          "answer": "string",
+          "answerExplain": "string",
+          "type": "SHORT_ANSWER",
+          "difficulty": "ZERO",
+          "score": 0
+        }
+      ]
+    }
+  ],
+]

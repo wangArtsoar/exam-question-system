@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author 王艺翔
- * @description UserResponse
+ * @description UserResponse 用户
  * @date 2023/5/11 20:30
  * @phone 18318436514
  * @email w2603494062@gmail.com

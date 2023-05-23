@@ -32,8 +32,8 @@ public class QuestionApi {
 	@PostMapping("create")
 	@Operation(summary = "创建问题")
 	@PreAuthorize("hasAuthority('teacher:create')")
-	public ResponseEntity<QuestionResponse> saveQuestion(@RequestBody QuestionRequest request) {
-		return ResponseEntity.ok(questionService.saveQuestion(request));
+	public ResponseEntity<List<QuestionResponse>> saveQuestion(@RequestBody List<QuestionRequest> requests) {
+		return ResponseEntity.ok(questionService.saveQuestion(requests));
 	}
 
 	@GetMapping("find")

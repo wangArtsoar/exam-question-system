@@ -1,6 +1,5 @@
 package com.xiaoyi.springsecurity.api.response;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,17 +7,20 @@ import lombok.NoArgsConstructor;
 
 /**
  * @author 王艺翔
- * @description AuthenticationResponse 认证
- * @date 2023/5/11 14:42
+ * @description RespondResponse 回答题目答案
+ * @date 2023/5/19 18:14
  * @phone 18318436514
  * @email w2603494062@gmail.com
  * @github https://github.com/Tom-Collection"
  */
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
-	@JsonProperty("access-token")
-	private String token;
+public class RespondResponse {
+	private String topic;
+	private Double score;
+	private String respond;
+	private String answerExplain;
+	private String answer;
 }

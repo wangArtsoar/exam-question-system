@@ -1,5 +1,7 @@
 package com.xiaoyi.springsecurity.api.request;
 
+import com.xiaoyi.springsecurity.domain.user.entity.Grade;
+import com.xiaoyi.springsecurity.domain.user.entity.Specialty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +11,8 @@ import java.util.List;
 
 /**
  * @author 王艺翔
- * @description ExamRequest
- * @date 2023/5/18 22:45
+ * @description TeamRequest
+ * @date 2023/5/19 13:23
  * @phone 18318436514
  * @email w2603494062@gmail.com
  * @github https://github.com/Tom-Collection"
@@ -19,10 +21,11 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExamRequest {
+public class TeamRequest {
 	private String name;
-	private String description;
-	private Long limitedTime; // 1000 * 60 * 60 * 1.2 = 120min
-	private String author;
-	private List<QuestionRequest> questions;
+	private Specialty specialty;
+	private Grade grade;
+	private String headTeacher;
+	private String headTeacherEmail;
+	private List<CourseRequest> courses;
 }

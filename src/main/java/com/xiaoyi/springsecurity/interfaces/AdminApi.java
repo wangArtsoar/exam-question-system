@@ -1,9 +1,10 @@
 package com.xiaoyi.springsecurity.interfaces;
 
 import com.xiaoyi.springsecurity.api.request.RegisterRequest;
+import com.xiaoyi.springsecurity.api.request.TeamRequest;
 import com.xiaoyi.springsecurity.api.response.UserResponse;
-import com.xiaoyi.springsecurity.domain.user.UserService;
 import com.xiaoyi.springsecurity.domain.user.entity.Role;
+import com.xiaoyi.springsecurity.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -45,4 +46,13 @@ public class AdminApi {
 		request.setRole(Role.ADMIN);
 		return ResponseEntity.ok(userService.save(request));
 	}
+
+	@PostMapping("/createTeam")
+	@PreAuthorize("hasAuthority('admin:create')")
+	@Operation(summary = "创建班级")
+	public ResponseEntity<String> createTeam(@RequestBody TeamRequest request) {
+		userService.createTeam(request);
+		return ResponseEntity.ok(request.getName() + "创建成功");
+	}
+
 }

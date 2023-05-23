@@ -1,6 +1,6 @@
 package com.xiaoyi.springsecurity.infrastructure.config;
 
-import com.xiaoyi.springsecurity.domain.user.UserRepo;
+import com.xiaoyi.springsecurity.domain.user.repo.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

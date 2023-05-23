@@ -26,6 +26,7 @@ public class Team {
 	@Id
 	@GeneratedValue
 	private Integer id;
+	private String name;
 	@Enumerated(EnumType.STRING)
 	private Specialty specialty;
 	@Enumerated(EnumType.STRING)
@@ -34,6 +35,6 @@ public class Team {
 	private List<Course> courses;
 	@OneToMany
 	private List<User> students;
-	@OneToOne
+	@OneToOne(fetch = FetchType.EAGER)
 	private User headTeacher;
 }

@@ -1,15 +1,14 @@
 package com.xiaoyi.springsecurity.interfaces;
 
+import com.xiaoyi.springsecurity.api.response.TeamResponse;
 import com.xiaoyi.springsecurity.api.response.UserResponse;
-import com.xiaoyi.springsecurity.domain.user.UserService;
+import com.xiaoyi.springsecurity.domain.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author 王艺翔
@@ -37,5 +36,17 @@ public class UserApi {
 	@Operation(summary = "申请删除用户")
 	public ResponseEntity<String> applyDelUser(@PathVariable String email, @PathVariable String password) {
 		return ResponseEntity.ok(userService.applyDelUser(email, password));
+	}
+
+	@PutMapping("/joinTeam{teamId}")
+	@Operation(summary = "加入班级")
+	public ResponseEntity<String> joinTeam(@PathVariable Integer teamId, HttpServletRequest request) {
+		return ResponseEntity.ok(userService.joinTeam(teamId, request));
+	}
+
+	@GetMapping("/getTeamById")
+	@Operation(summary = "查询班级")
+	public ResponseEntity<TeamResponse> getTeamById(Integer teamId) {
+		return ResponseEntity.ok(userService.getTeamById(teamId));
 	}
 }

@@ -1,7 +1,10 @@
 package com.xiaoyi.springsecurity.domain.examination.service;
 
 import com.xiaoyi.springsecurity.api.request.ExamRequest;
+import com.xiaoyi.springsecurity.api.response.AnswerExamResponse;
 import com.xiaoyi.springsecurity.api.response.ExamResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 /**
  * @author 王艺翔
@@ -13,4 +16,10 @@ import com.xiaoyi.springsecurity.api.response.ExamResponse;
  */
 public interface ExaminationService {
 	ExamResponse saveExam(ExamRequest request);
+
+	ExamResponse findExamById(Integer id);
+
+	Page<ExamResponse> findExamList(Pageable pageable);
+
+	AnswerExamResponse startAnswerById(Integer id);
 }

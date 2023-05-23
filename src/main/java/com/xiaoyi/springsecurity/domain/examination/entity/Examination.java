@@ -34,6 +34,7 @@ public class Examination {
 	private Long limitedTime; // 1000 * 60 * 60 * 1.2 = 120min
 	private String author;
 	private Date createTime;
+	private Double difficulty;
 	@OneToMany
 	private List<Question> questions;
 }

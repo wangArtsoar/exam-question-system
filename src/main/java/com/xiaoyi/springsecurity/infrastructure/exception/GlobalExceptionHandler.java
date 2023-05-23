@@ -42,5 +42,11 @@ public class GlobalExceptionHandler {
 	public ResponseEntity<String> handleCreateFailedException(CreateFailedException e) {
 		return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(e.getMessage());
 	}
+
+	@ExceptionHandler(value = JoinException.class)
+	@ResponseBody
+	public ResponseEntity<String> handleJoinException(JoinException e) {
+		return ResponseEntity.status(UNAUTHORIZED).body(e.getMessage());
+	}
 }
 
