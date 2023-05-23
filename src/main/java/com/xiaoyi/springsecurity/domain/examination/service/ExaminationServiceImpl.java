@@ -7,9 +7,7 @@ import com.xiaoyi.springsecurity.api.response.ExamResponse;
 import com.xiaoyi.springsecurity.api.response.QuestionResponse;
 import com.xiaoyi.springsecurity.domain.examination.entity.Examination;
 import com.xiaoyi.springsecurity.domain.examination.repo.ExaminationRepo;
-import com.xiaoyi.springsecurity.domain.question_bank.entity.Option;
 import com.xiaoyi.springsecurity.domain.question_bank.entity.Question;
-import com.xiaoyi.springsecurity.domain.question_bank.repo.OptionRepo;
 import com.xiaoyi.springsecurity.domain.question_bank.serivce.QuestionService;
 import com.xiaoyi.springsecurity.domain.user.entity.User;
 import com.xiaoyi.springsecurity.domain.user.repo.UserRepo;
@@ -18,7 +16,6 @@ import com.xiaoyi.springsecurity.infrastructure.config.JwtUtils;
 import com.xiaoyi.springsecurity.infrastructure.exception.CreateFailedException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,10 +23,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -49,7 +44,6 @@ public class ExaminationServiceImpl implements ExaminationService {
 	private final ExaminationRepo examinationRepo;
 	private final QuestionService questionService;
 	private final PlatformTransactionManager manager;
-	private final OptionRepo optionRepo;
 	private final HttpServletRequest request;
 
 
@@ -71,10 +65,8 @@ public class ExaminationServiceImpl implements ExaminationService {
 							.createTime(new Date())
 							.difficulty(sum / questionResponses.size())
 							.build());
-			// 转换ExamResponse
-			ExamResponse examResponse = new ExamResponse();
-			// TODO 转换为ExamResponse
-			BeanUtils.copyProperties(examination, examResponse);
+			// 转换为ExamResponse
+			ExamResponse examResponse = toExamResponse(examination);
 			manager.commit(status);
 			return examResponse;
 		} catch (Exception e) {
@@ -83,47 +75,57 @@ public class ExaminationServiceImpl implements ExaminationService {
 		}
 	}
 
+	private ExamResponse toExamResponse(Examination examination) {
+		return ExamResponse.builder()
+						.name(examination.getName())
+						.limitedTime(examination.getLimitedTime())
+						.questions(examination.getQuestions()
+										.stream().map(question -> QuestionResponse.builder()
+														.topic(question.getTopic())
+														.score(question.getScore())
+														.type(question.getType())
+														.difficulty(question.getDifficulty())
+														.answer(question.getAnswer())
+														.answerExplain(question.getAnswerExplain())
+														.options(Utils.toOptionResponseList(question.getOptions()))
+														.build())
+										.collect(Collectors.toList()))
+						.author(examination.getAuthor())
+						.description(examination.getDescription())
+						.createTime(examination.getCreateTime())
+						.build();
+	}
+
 	@Override
 	public ExamResponse findExamById(Integer id) {
-		// TODO 查询试卷
-		return null;
+		return toExamResponse(examinationRepo.findById(id).orElseThrow());
 	}
 
 	@Override
 	public Page<ExamResponse> findExamList(Pageable pageable) {
-		// TODO 分页操作
-		return examinationRepo.findAll(pageable).map(examination -> ExamResponse.builder().build());
+		return examinationRepo.findAll(pageable).map(this::toExamResponse);
 	}
 
 	@Override
 	public AnswerExamResponse startAnswerById(Integer id) {
-		// 获取user
 		String jwt = Utils.getJwt(request.getHeader("Authorization"));
 		User user = userRepo.findByEmail(jwtUtils.extractUserEmail(jwt)).orElseThrow();
-		// 查询exam
 		Examination examination = examinationRepo.findById(id).orElseThrow();
-		// 设置值
+		return toAnswerExamResponse(examination, user);
+	}
+
+	private AnswerExamResponse toAnswerExamResponse(Examination examination, User user) {
 		Double totalScore = null;
-		List<Integer> questionIds = new ArrayList<>();
-		for (Question question : examination.getQuestions()) {
-			questionIds.add(question.getId());
-			totalScore += question.getScore();
-		}
-		// 查询Option
-		List<Option> options = optionRepo.findByQuestionIdIn(questionIds);
-		// 提取option到AnswerQuestionResponse
-		Map<Integer, List<Option>> map = options.stream().collect(Collectors.groupingBy(Option::getQuestionId));
-		List<AnswerQuestionResponse> list = new ArrayList<>();
-		map.forEach((k, v) -> {
-			Question question = examination.getQuestions().get(k);
-			list.add(AnswerQuestionResponse.builder()
-							.score(question.getScore())
-							.topic(question.getTopic())
-							.type(question.getType())
-							.optionResponses(Utils.toOptionResponseList(v)).build());
-		});
+		for (Question question : examination.getQuestions()) totalScore += question.getScore();
 		return AnswerExamResponse.builder()
-						.answerQuestionResponses(list)
+						.answerQuestionResponses(examination.getQuestions().stream()
+										.map(question -> AnswerQuestionResponse.builder()
+														.topic(question.getTopic())
+														.score(question.getScore())
+														.type(question.getType())
+														.optionResponses(Utils.toOptionResponseList(question.getOptions()))
+														.build())
+										.collect(Collectors.toList()))
 						.limitTime(examination.getLimitedTime())
 						.username(user.getName())
 						.totalScore(totalScore)

@@ -36,5 +36,6 @@ public class Examination {
 	private Date createTime;
 	private Double difficulty;
 	@OneToMany
+	@JoinColumn(name = "examinationId", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
 	private List<Question> questions;
 }

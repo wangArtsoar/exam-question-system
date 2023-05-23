@@ -22,18 +22,18 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Table(name = "_answerSheetDetails")
-public class AnswerSheetDetails {
+@Table(name = "_answerDetails")
+public class AnswerDetails {
 	@Id
 	@GeneratedValue
 	private Integer id;
 	@OneToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
 	private User user;
 	private Long compactTime; // 答题时间
 	@Enumerated(EnumType.STRING)
 	private CompleteLevel level;
 	@OneToMany
+	@JoinColumn(name = "answer_details_id",foreignKey = @ForeignKey(name = "none",value = ConstraintMode.NO_CONSTRAINT))
 	private List<Respond> responds;
-
 }

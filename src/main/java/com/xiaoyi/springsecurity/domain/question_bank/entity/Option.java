@@ -22,8 +22,8 @@ public class Option {
 	@Id
 	@GeneratedValue
 	private Integer id;
-	private Integer questionId;
 	@Column(columnDefinition = "TEXT")
 	private String content;
+	private Integer questionId;
 	private boolean isTrue;
 }

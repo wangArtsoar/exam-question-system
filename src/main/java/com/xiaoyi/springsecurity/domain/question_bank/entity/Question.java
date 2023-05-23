@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 /**
  * @author 王艺翔
  * @description Question
@@ -35,4 +37,7 @@ public class Question {
 	@Enumerated(EnumType.ORDINAL)
 	private Difficulty difficulty;
 	private Double score;
+	@OneToMany
+	@JoinColumn(name = "questionId", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
+	private List<Option> options;
 }

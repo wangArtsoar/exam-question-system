@@ -1,6 +1,6 @@
 package com.xiaoyi.springsecurity.domain.examination.repo;
 
-import com.xiaoyi.springsecurity.domain.examination.entity.AnswerSheetDetails;
+import com.xiaoyi.springsecurity.domain.examination.entity.AnswerDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**
@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * @email w2603494062@gmail.com
  * @github https://github.com/Tom-Collection"
  */
-public interface AnswerSheetDetailsRepo extends
-				JpaRepository<AnswerSheetDetails, Integer> {
+public interface AnswerDetailsRepo extends JpaRepository<AnswerDetails, Integer> {
 
 }

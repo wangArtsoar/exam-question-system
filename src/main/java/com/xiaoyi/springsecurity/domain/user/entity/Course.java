@@ -26,5 +26,6 @@ public class Course {
 	private Integer id;
 	private String name;
 	@OneToOne
+	@JoinColumn(name = "userId", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
 	private User teacher;
 }

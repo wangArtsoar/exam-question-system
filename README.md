@@ -54,3 +54,19 @@ http://localhost:8080/swagger-ui.html
 发送请求 ——> SecurityFilterChain ——> JwtAuthFilter ——>
 UsernamePasswordAuthenticationFilter ——> 做出响应  
 
+# 业务
+
+## 规则
+《阿里巴巴Java规范手册》中规定不得使用外键和级联，所以我对entity进行了修改。  
+在所有有关联的地方加入了这段代码。
+```java
+	@OneToMany
+	@JoinColumn(name = "team_id", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
+	private List<Course> courses;
+	@OneToMany
+	@JoinColumn(name = "team_id", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
+	private List<User> students;
+	@OneToOne
+	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
+	private User headTeacher;
+```

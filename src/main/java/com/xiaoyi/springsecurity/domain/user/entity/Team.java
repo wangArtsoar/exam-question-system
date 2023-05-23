@@ -32,9 +32,12 @@ public class Team {
 	@Enumerated(EnumType.STRING)
 	private Grade grade;
 	@OneToMany
+	@JoinColumn(name = "team_id", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
 	private List<Course> courses;
 	@OneToMany
+	@JoinColumn(name = "team_id", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
 	private List<User> students;
-	@OneToOne(fetch = FetchType.EAGER)
+	@OneToOne
+	@JoinColumn(name = "user_id", foreignKey = @ForeignKey(name = "none", value = ConstraintMode.NO_CONSTRAINT))
 	private User headTeacher;
 }
