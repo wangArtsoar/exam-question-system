@@ -15,7 +15,11 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static com.xiaoyi.springsecurity.domain.question_bank.entity.QuestionType.SHORT_ANSWER;
 
 /**
  * @author 王艺翔
@@ -35,25 +39,28 @@ public class QuestionServiceImpl implements QuestionService {
 
 	@Override
 	public List<QuestionResponse> saveQuestion(List<QuestionRequest> requests) {
-		// 事务管理
 		TransactionStatus status = manager.getTransaction(new DefaultTransactionDefinition());
 		try {
 			// 创建question
-			List<Question> questions = createQues(requests);
+			List<Question> questions = questionRepo.saveAll(createQues(requests));
 			// 保存Options
-			/*List<Option> options = new ArrayList<>();
-			Map<Integer, List<Option>> map = new HashMap<>();
+			List<Option> options = new ArrayList<>();
 			for (int i = 0; i < requests.size(); i++) {
 				Question question = questions.get(i);
 				QuestionRequest request = requests.get(i);
 				if (!Objects.equals(request.getType(), SHORT_ANSWER)) {
-					var list = request.getOptions().stream().peek(option -> option.setQuestion(question)).toList();
+					var list = request.getOptions().stream()
+									.map(optionRequest -> Option.builder()
+													.questionId(question.getId())
+													.content(optionRequest.getContent())
+													.isTrue(optionRequest.isTrue()).build())
+									.toList();
 					options.addAll(list);
-					map.put(question.getId(), list);
+					question.setOptions(list);
 				}
 			}
 			// 添加选项
-			optionRepo.saveAll(options);*/
+			optionRepo.saveAll(options);
 			manager.commit(status);
 			return toQuestionResponse(questions);
 		} catch (Exception e) {
@@ -67,24 +74,24 @@ public class QuestionServiceImpl implements QuestionService {
 						.map(question -> {
 							QuestionResponse questionResponse = new QuestionResponse();
 							BeanUtils.copyProperties(question, questionResponse);
-							List<Option> options = optionRepo.findByQuestionId(question.getId());
+							List<Option> options = question.getOptions();
 							questionResponse.setOptions(Utils.toOptionResponseList(options));
 							return questionResponse;
-						}).toList();
+						})
+						.toList();
 	}
 
 	private List<Question> createQues(List<QuestionRequest> requests) {
-		var list = requests.stream().map(request -> Question.builder()
+		return requests.stream()
+						.map(request -> Question.builder()
 										.topic(request.getTopic())
 										.answer(request.getAnswer())
 										.answerExplain(request.getAnswerExplain())
 										.score(request.getScore())
 										.type(request.getType())
 										.difficulty(request.getDifficulty())
-										.options(request.getOptions())
 										.build())
 						.toList();
-		return questionRepo.saveAll(list);
 	}
 
 	@Override

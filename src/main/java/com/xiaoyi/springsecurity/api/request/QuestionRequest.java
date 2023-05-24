@@ -1,7 +1,6 @@
 package com.xiaoyi.springsecurity.api.request;
 
 import com.xiaoyi.springsecurity.domain.question_bank.entity.Difficulty;
-import com.xiaoyi.springsecurity.domain.question_bank.entity.Option;
 import com.xiaoyi.springsecurity.domain.question_bank.entity.QuestionType;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -37,5 +36,5 @@ public class QuestionRequest {
 	@Schema(description = "难度")
 	private Difficulty difficulty;
 	@Schema(description = "选项合集")
-	private List<Option> options;
+	private List<OptionRequest> options;
 }
