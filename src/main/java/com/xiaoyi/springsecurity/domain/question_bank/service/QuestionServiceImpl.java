@@ -1,4 +1,4 @@
-package com.xiaoyi.springsecurity.domain.question_bank.serivce;
+package com.xiaoyi.springsecurity.domain.question_bank.service;
 
 import com.xiaoyi.springsecurity.api.request.QuestionRequest;
 import com.xiaoyi.springsecurity.api.response.QuestionResponse;
@@ -42,7 +42,7 @@ public class QuestionServiceImpl implements QuestionService {
 		TransactionStatus status = manager.getTransaction(new DefaultTransactionDefinition());
 		try {
 			// 创建question
-			List<Question> questions = questionRepo.saveAll(createQues(requests));
+			List<Question> questions = questionRepo.saveAll(Utils.createQuestionList(requests));
 			// 保存Options
 			List<Option> options = new ArrayList<>();
 			for (int i = 0; i < requests.size(); i++) {
@@ -76,21 +76,9 @@ public class QuestionServiceImpl implements QuestionService {
 							BeanUtils.copyProperties(question, questionResponse);
 							List<Option> options = question.getOptions();
 							questionResponse.setOptions(Utils.toOptionResponseList(options));
+							questionResponse.setQuestionId(question.getId());
 							return questionResponse;
 						})
-						.toList();
-	}
-
-	private List<Question> createQues(List<QuestionRequest> requests) {
-		return requests.stream()
-						.map(request -> Question.builder()
-										.topic(request.getTopic())
-										.answer(request.getAnswer())
-										.answerExplain(request.getAnswerExplain())
-										.score(request.getScore())
-										.type(request.getType())
-										.difficulty(request.getDifficulty())
-										.build())
 						.toList();
 	}
 

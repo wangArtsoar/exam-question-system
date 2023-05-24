@@ -2,7 +2,7 @@ package com.xiaoyi.springsecurity.interfaces;
 
 import com.xiaoyi.springsecurity.api.request.QuestionRequest;
 import com.xiaoyi.springsecurity.api.response.QuestionResponse;
-import com.xiaoyi.springsecurity.domain.question_bank.serivce.QuestionService;
+import com.xiaoyi.springsecurity.domain.question_bank.service.QuestionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

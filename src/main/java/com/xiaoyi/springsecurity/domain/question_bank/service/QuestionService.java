@@ -1,4 +1,4 @@
-package com.xiaoyi.springsecurity.domain.question_bank.serivce;
+package com.xiaoyi.springsecurity.domain.question_bank.service;
 
 import com.xiaoyi.springsecurity.api.request.QuestionRequest;
 import com.xiaoyi.springsecurity.api.response.QuestionResponse;

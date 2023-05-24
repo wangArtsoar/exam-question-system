@@ -22,5 +22,5 @@ public class OptionResponse {
 	@Schema(description = "选项内容")
 	private String content;
 	@Schema(description = "是否正确")
-	private boolean isTure;
+	private boolean isTrue;
 }

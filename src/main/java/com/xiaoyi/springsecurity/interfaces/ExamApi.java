@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
  * @date 2023/5/18 17:03
  * @phone 18318436514
  * @email w2603494062@gmail.com
- * @github https://github.com/Tom-Collection"
+ * @github <a href="https://github.com/Tom-Collection">...</a>"
  */
 @RestController
 @RequestMapping("api/exam")

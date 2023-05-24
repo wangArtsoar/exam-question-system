@@ -29,5 +29,5 @@ public class AnswerQuestionResponse {
 	@Schema(description = "分数")
 	private Double score;
 	@Schema(description = "选项合集")
-	private List<OptionResponse> optionResponses;
+	private List<String> optionResponses;
 }

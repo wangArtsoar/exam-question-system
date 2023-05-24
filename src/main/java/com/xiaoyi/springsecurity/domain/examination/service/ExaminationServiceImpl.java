@@ -6,8 +6,10 @@ import com.xiaoyi.springsecurity.api.response.*;
 import com.xiaoyi.springsecurity.domain.examination.entity.CompleteLevel;
 import com.xiaoyi.springsecurity.domain.examination.entity.Examination;
 import com.xiaoyi.springsecurity.domain.examination.repo.ExaminationRepo;
+import com.xiaoyi.springsecurity.domain.question_bank.entity.Option;
 import com.xiaoyi.springsecurity.domain.question_bank.entity.Question;
-import com.xiaoyi.springsecurity.domain.question_bank.serivce.QuestionService;
+import com.xiaoyi.springsecurity.domain.question_bank.repo.OptionRepo;
+import com.xiaoyi.springsecurity.domain.question_bank.service.QuestionService;
 import com.xiaoyi.springsecurity.domain.user.entity.User;
 import com.xiaoyi.springsecurity.domain.user.repo.UserRepo;
 import com.xiaoyi.springsecurity.infrastructure.common.Utils;
@@ -22,6 +24,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +46,7 @@ public class ExaminationServiceImpl implements ExaminationService {
 
 	private final JwtUtils jwtUtils;
 	private final UserRepo userRepo;
+	private final OptionRepo optionRepo;
 	private final ExaminationRepo examinationRepo;
 	private final QuestionService questionService;
 	private final PlatformTransactionManager manager;
@@ -53,11 +57,22 @@ public class ExaminationServiceImpl implements ExaminationService {
 	public ExamResponse saveExam(ExamRequest request) {
 		TransactionStatus status = manager.getTransaction(new DefaultTransactionDefinition());
 		try {
-			// 保存问题
+			// 保存问题列表
 			List<QuestionResponse> questionResponses = questionService.saveQuestion(request.getQuestions());
-			// 提取难度
+			// 创建问题列表
+			List<Question> list = Utils.createQuestionList(questionResponses);
+			// 提取难度、问题Id
 			double sum = 0;
-			for (QuestionResponse response : questionResponses) sum += response.getDifficulty().getNumber();
+			List<Integer> questionIds = new ArrayList<>();
+			for (QuestionResponse response : questionResponses) {
+				questionIds.add(response.getQuestionId());
+				sum += response.getDifficulty().getNumber();
+			}
+			// 查询选项
+			List<Option> byQuestionIdIn = optionRepo.findByQuestionIdIn(questionIds);
+			// 提取选项
+			Map<Integer, List<Option>> map = byQuestionIdIn.stream().collect(Collectors.groupingBy(Option::getQuestionId));
+			list.forEach(question -> question.setOptions(map.get(question.getId())));
 			// 保存试卷
 			Examination examination = examinationRepo.save(Examination.builder()
 							.name(request.getName())
@@ -66,6 +81,7 @@ public class ExaminationServiceImpl implements ExaminationService {
 							.limitedTime(request.getLimitedTime())
 							.createTime(new Date())
 							.difficulty(sum / questionResponses.size())
+							.questions(list)
 							.build());
 			// 转换为ExamResponse
 			ExamResponse examResponse = toExamResponse(examination);
@@ -173,7 +189,10 @@ public class ExaminationServiceImpl implements ExaminationService {
 														.topic(question.getTopic())
 														.score(question.getScore())
 														.type(question.getType())
-														.optionResponses(Utils.toOptionResponseList(question.getOptions()))
+														.optionResponses(question.getOptions()
+																		.stream()
+																		.map(Option::getContent)
+																		.collect(Collectors.toList()))
 														.build())
 										.collect(Collectors.toList()))
 						.limitTime(examination.getLimitedTime())
