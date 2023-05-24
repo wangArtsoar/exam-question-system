@@ -1,6 +1,8 @@
 package com.xiaoyi.springsecurity.interfaces;
 
+import com.xiaoyi.springsecurity.api.request.AnswerDetailsRequest;
 import com.xiaoyi.springsecurity.api.request.ExamRequest;
+import com.xiaoyi.springsecurity.api.response.AnswerDetailResponse;
 import com.xiaoyi.springsecurity.api.response.AnswerExamResponse;
 import com.xiaoyi.springsecurity.api.response.ExamResponse;
 import com.xiaoyi.springsecurity.domain.examination.service.ExaminationService;
@@ -51,8 +53,14 @@ public class ExamApi {
 	}
 
 	@PutMapping("answerById{id}")
-	@Operation(summary = "开始答卷")
-	public ResponseEntity<AnswerExamResponse> startAnswerExam(@PathVariable Integer id) {
+	@Operation(summary = "答卷本")
+	public ResponseEntity<AnswerExamResponse> queryAnswerExam(@PathVariable Integer id) {
 		return ResponseEntity.ok(examinationService.startAnswerById(id));
+	}
+
+	@PostMapping("checkPaper")
+	@Operation(summary = "查卷")
+	public ResponseEntity<AnswerDetailResponse> checkPaper(@RequestBody AnswerDetailsRequest request) {
+		return ResponseEntity.ok(examinationService.checkPaper(request));
 	}
 }

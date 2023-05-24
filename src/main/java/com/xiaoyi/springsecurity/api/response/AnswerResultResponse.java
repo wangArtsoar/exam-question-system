@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnswerSheetResultResponse {
+public class AnswerResultResponse {
 	@Schema(description = "答题人")
 	private String username;
 	@Schema(description = "试卷名称")
@@ -27,6 +27,8 @@ public class AnswerSheetResultResponse {
 	private Long compactTime;
 	@Schema(description = "限时")
 	private Long limitTime;
-	@Schema(description = "总分")
+	@Schema(description = "试卷总分")
 	private Double totalScore;
+	@Schema(description = "成绩")
+	private Double answerScore;
 }

@@ -1,6 +1,8 @@
 package com.xiaoyi.springsecurity.domain.examination.service;
 
+import com.xiaoyi.springsecurity.api.request.AnswerDetailsRequest;
 import com.xiaoyi.springsecurity.api.request.ExamRequest;
+import com.xiaoyi.springsecurity.api.response.AnswerDetailResponse;
 import com.xiaoyi.springsecurity.api.response.AnswerExamResponse;
 import com.xiaoyi.springsecurity.api.response.ExamResponse;
 import org.springframework.data.domain.Page;
@@ -22,4 +24,6 @@ public interface ExaminationService {
 	Page<ExamResponse> findExamList(Pageable pageable);
 
 	AnswerExamResponse startAnswerById(Integer id);
+
+	AnswerDetailResponse checkPaper(AnswerDetailsRequest request);
 }

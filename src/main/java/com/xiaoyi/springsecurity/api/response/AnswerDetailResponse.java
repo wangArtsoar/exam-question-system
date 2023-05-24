@@ -22,11 +22,13 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AnswerSheetDetailResponse {
+public class AnswerDetailResponse {
 	@Schema(description = "答题人")
 	private String username;
 	@Schema(description = "总分")
 	private Double totalScore;
+	@Schema(description = "答题时长")
+	private Long answerTime;
 	@Schema(description = "答题时间")
 	private Date answerDate;
 	@Schema(description = "回答程度")

@@ -23,6 +23,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class QuestionResponse {
+	private Integer questionId;
 	@Schema(description = "题目")
 	private String topic;
 	@Schema(description = "答案")

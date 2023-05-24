@@ -1,10 +1,9 @@
 package com.xiaoyi.springsecurity.domain.examination.service;
 
+import com.xiaoyi.springsecurity.api.request.AnswerDetailsRequest;
 import com.xiaoyi.springsecurity.api.request.ExamRequest;
-import com.xiaoyi.springsecurity.api.response.AnswerExamResponse;
-import com.xiaoyi.springsecurity.api.response.AnswerQuestionResponse;
-import com.xiaoyi.springsecurity.api.response.ExamResponse;
-import com.xiaoyi.springsecurity.api.response.QuestionResponse;
+import com.xiaoyi.springsecurity.api.response.*;
+import com.xiaoyi.springsecurity.domain.examination.entity.CompleteLevel;
 import com.xiaoyi.springsecurity.domain.examination.entity.Examination;
 import com.xiaoyi.springsecurity.domain.examination.repo.ExaminationRepo;
 import com.xiaoyi.springsecurity.domain.question_bank.entity.Question;
@@ -25,7 +24,10 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import static com.xiaoyi.springsecurity.domain.examination.entity.CompleteLevel.*;
 
 /**
  * @author 王艺翔
@@ -81,6 +83,7 @@ public class ExaminationServiceImpl implements ExaminationService {
 						.limitedTime(examination.getLimitedTime())
 						.questions(examination.getQuestions()
 										.stream().map(question -> QuestionResponse.builder()
+														.questionId(question.getId())
 														.topic(question.getTopic())
 														.score(question.getScore())
 														.type(question.getType())
@@ -114,9 +117,56 @@ public class ExaminationServiceImpl implements ExaminationService {
 		return toAnswerExamResponse(examination, user);
 	}
 
+	@Override
+	public AnswerDetailResponse checkPaper(AnswerDetailsRequest request) {
+		String jwt = Utils.getJwt(this.request.getHeader("Authorization"));
+		User user = userRepo.findByEmail(jwtUtils.extractUserEmail(jwt)).orElseThrow();
+		Examination examination = examinationRepo.findById(request.getExamId()).orElseThrow();
+		Map<Integer, String> answerQuestionMap = request.getAnswerQuestionMap();
+		List<Question> questions = examination.getQuestions();
+		Double totalScore = getTotalScore(questions, 0.0);
+		List<QuestionResponse> questionResponses = toExamResponse(examination).getQuestions();
+		// 对比答案
+		double answerScore = 0;
+		for (Question question : questions) {
+			String answer = answerQuestionMap.get(question.getId());
+			if (answer.equals(question.getAnswer())) answerScore += question.getScore();
+		}
+		// 判断答卷程度
+		CompleteLevel completeLevel;
+		if (answerScore >= EXCELLENT.getNumber()) {
+			completeLevel = EXCELLENT;
+		} else if (answerScore >= GOOD.getNumber()) {
+			completeLevel = GOOD;
+		} else if (answerScore >= PASS.getNumber()) {
+			completeLevel = PASS;
+		} else {
+			completeLevel = FAIL;
+		}
+		return AnswerDetailResponse.builder()
+						.answerDate(new Date(new Date().getTime() - request.getAnswerTime()))
+						.answerTime(request.getAnswerTime())
+						.level(completeLevel)
+						.username(user.getName())
+						.totalScore(totalScore)
+						.respondResponses(questionResponses.stream()
+										.map(questionResponse -> RespondResponse.builder()
+														.topic(questionResponse.getTopic())
+														.score(questionResponse.getScore())
+														.answer(questionResponse.getAnswer())
+														.answerExplain(questionResponse.getAnswerExplain())
+														.respond(answerQuestionMap.get(questionResponse.getQuestionId()))
+														.build())
+										.collect(Collectors.toList()))
+						.build();
+	}
+
+	private Double getTotalScore(List<Question> questions, double i) {
+		for (Question question : questions) i += question.getScore();
+		return i;
+	}
+
 	private AnswerExamResponse toAnswerExamResponse(Examination examination, User user) {
-		Double totalScore = null;
-		for (Question question : examination.getQuestions()) totalScore += question.getScore();
 		return AnswerExamResponse.builder()
 						.answerQuestionResponses(examination.getQuestions().stream()
 										.map(question -> AnswerQuestionResponse.builder()
@@ -128,7 +178,7 @@ public class ExaminationServiceImpl implements ExaminationService {
 										.collect(Collectors.toList()))
 						.limitTime(examination.getLimitedTime())
 						.username(user.getName())
-						.totalScore(totalScore)
+						.totalScore(getTotalScore(examination.getQuestions(), 0.0))
 						.name(examination.getName()).build();
 	}
 }

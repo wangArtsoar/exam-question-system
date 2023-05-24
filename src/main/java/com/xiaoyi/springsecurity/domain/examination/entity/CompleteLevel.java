@@ -1,5 +1,8 @@
 package com.xiaoyi.springsecurity.domain.examination.entity;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
 /**
  * @author 王艺翔
  * @description ComplateLevel
@@ -8,9 +11,13 @@ package com.xiaoyi.springsecurity.domain.examination.entity;
  * @email w2603494062@gmail.com
  * @github https://github.com/Tom-Collection"
  */
+@RequiredArgsConstructor
 public enum CompleteLevel {
-	EXCELLENT,
-	GOOD,
-	PASS,
-	FAIL
+	EXCELLENT(90),
+	GOOD(75),
+	PASS(60),
+	FAIL(0);
+
+	@Getter
+	private final double number;
 }
